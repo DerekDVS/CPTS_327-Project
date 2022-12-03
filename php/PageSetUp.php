@@ -18,6 +18,9 @@
             case "LoginPage.php":
                 echo "<link rel='stylesheet' type='text/css' href='../css/signIn.css'/>";
                 break;
+            case "AuthenticationPage.php":
+                echo "<link rel='stylesheet' type='text/css' href='../css/signIn.css'/>";
+                break;
             case "SignUpPage.php":
                 echo "<link rel='stylesheet' type='text/css' href='../css/signUp.css'/>";
                 break;

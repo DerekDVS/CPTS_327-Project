@@ -50,6 +50,7 @@
         </div>
     </section>
 
+
     <!--Insert Page Footer-->
     <?php pageFooter(); ?>
 </body>

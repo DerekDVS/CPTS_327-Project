@@ -1,6 +1,6 @@
 <?php
     // init vars
-    $account_username_error = $account_password_error = $account_firstname_error = $account_lastname_error = "";
+    $account_username_error = $account_password_error = $account_firstname_error = $account_lastname_error =  "";
     $account_username = $account_password = $account_firstname = $account_lastname = "";
 
     // posting
@@ -36,6 +36,8 @@
         }
         else
         {
+            // Hash creation            
+
             $account_password = $_POST["account_password"];
         }
 
@@ -43,21 +45,27 @@
         if($account_username_error == "" and $account_password_error == "")
         {
             // Query to see if the user is unique
-            $check= "SELECT * FROM Users WHERE username = '$account_username' and user_password = '$account_password';";
+            $check= "SELECT * FROM Users WHERE username = '$account_username';";
             $sqlCheck = $_SESSION['conn']->query($check);
 
             // Login if the user exists
             if($sqlCheck->num_rows > 0)
             {
                 $sqlCheck = $sqlCheck->fetch_assoc();
-                $_SESSION['user'] = $sqlCheck["username"];
-                header("Location: ../Pages/MainPage.php");
-                
+                if (password_verify($account_password, $sqlCheck["user_password"]))
+                {
+                    header("Location: ../Pages/AuthenticationPage.php?user={$sqlCheck["username"]}");
+                }
+                else    // correct password
+                {
+                    echo "wrong password";
+                }
             }                
             else
             {
                 echo "Non-existent username";
             }
-        }            
+        }  
+        
     }
 ?>

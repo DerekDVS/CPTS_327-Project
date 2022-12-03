@@ -51,6 +51,12 @@
                     <span class="error"><?php echo $account_lastname_error ?></span> 
                     <span class="error"><?php echo $account_duplicate_error ?></span>
                 </div>
+                <!-- email -->
+                <div class="input-field">
+                    <label>Email</label>
+                    <input type="text" placeholder="Email" name="account_email" value="<?php echo $account_email; ?>">               
+                    <span class="error"><?php echo $account_email_error ?></span>
+                </div>
             </div>
             <!-- Submission -->
             <div class="action">

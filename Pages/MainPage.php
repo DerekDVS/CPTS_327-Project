@@ -21,8 +21,10 @@
         <h1>Derek's Website</h1>
         <p>Welcome to my website</p>
     </div>
-    
+
     <?php
+
+        
         // init vars
         $post_title = $post_desc = "";
         $login_error = "";
@@ -125,6 +127,7 @@
                 {
                     echo "<p>No posts at the momment</p>";
                 }   
+
             ?>
         </div>
     </div>

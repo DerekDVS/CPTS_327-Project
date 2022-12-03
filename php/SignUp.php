@@ -1,7 +1,7 @@
 <?php
     // init vars
-    $account_username_error = $account_password_error = $account_firstname_error = $account_lastname_error = $account_duplicate_error = "";
-    $account_username = $account_password = $account_firstname = $account_lastname = "";
+    $account_username_error = $account_password_error = $account_firstname_error = $account_lastname_error = $account_duplicate_error = $account_email_error = "";
+    $account_username = $account_password = $account_firstname = $account_lastname = $account_email = "";
 
     // posting
     if ($_SERVER["REQUEST_METHOD"] == "POST")
@@ -9,17 +9,17 @@
         if(isset($_POST['Submit']))
         {
             // username
-            if(empty($_POST["account_username"]))
+            if(empty(htmlspecialchars($_POST["account_username"])))
             {
                 $account_username_error = "Username Required";
             }
             else
             {
-                $account_username = $_POST["account_username"];
+                $account_username = htmlspecialchars($_POST["account_username"]);
             }
 
             // password
-            if(empty($_POST["account_password"]))
+            if(empty(htmlspecialchars($_POST["account_password"])))
             {
                 $account_password_error = "Password Required";
             }
@@ -31,49 +31,64 @@
                 {4,}            # make sure the string is longer than 4 characters
                 $               # end of input
             */
-            elseif(!preg_match("/^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]{4,}$/", $_POST["account_password"]))
+            elseif(!preg_match("/^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]{4,}$/", htmlspecialchars($_POST["account_password"])))
             {
                 // if the check fails explain why
                 $account_password_error = "Letters and Numbers are required with a length of at least 4";
             }
             else
             {
-                $account_password = $_POST["account_password"];
+                $hash = password_hash(htmlspecialchars($_POST["account_password"]), PASSWORD_BCRYPT);
+                $account_password = $hash;
             }
 
             // firstname
-            if(empty($_POST["account_firstname"]))
+            if(empty(htmlspecialchars($_POST["account_firstname"])))
             {
                 $account_firstname_error = "Firstname Required";
             }
-            elseif(!preg_match("/^[a-zA-Z]*$/", $_POST["account_firstname"]))
+            elseif(!preg_match("/^[a-zA-Z]*$/", htmlspecialchars($_POST["account_firstname"])))
             {
                 $account_firstname_error = "Only Letters Allowed";
             }
             else
             {
-                $account_firstname = $_POST["account_firstname"];
+                $account_firstname = htmlspecialchars($_POST["account_firstname"]);
             }
 
             // lastname
-            if(empty($_POST["account_lastname"]))
+            if(empty(htmlspecialchars($_POST["account_lastname"])))
             {
                 $account_lastname_error = "Lastname Required";
             }
-            elseif(!preg_match("/^[a-zA-Z]*$/", $_POST["account_lastname"]))
+            elseif(!preg_match("/^[a-zA-Z]*$/", htmlspecialchars($_POST["account_lastname"])))
             {
                 $account_lastname_error = "Only Letters Allowed";
             }
             else
             {
-                $account_lastname = $_POST["account_lastname"];
+                $account_lastname = htmlspecialchars($_POST["account_lastname"]);
+            }
+
+            //email
+            if(empty(htmlspecialchars($_POST["account_email"])))
+            {
+                $account_email_error = "no email provided";
+            }
+            else if(!preg_match("/^[^0-9][_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/", htmlspecialchars($_POST["account_email"])))
+            {
+                $account_email_error = "not formated correctly";
+            }
+            else
+            {
+                $account_email = htmlspecialchars($_POST["account_email"]);
             }
 
             // insertion querry
-            $sql = "INSERT INTO Users (username, user_password, firstName, lastName) VALUES('$account_username', '$account_password', '$account_firstname', '$account_lastname');";
+            $sql = "INSERT INTO Users (username, user_password, firstName, lastName, email) VALUES('$account_username', '$account_password', '$account_firstname', '$account_lastname', '$account_email');";
 
             // Checks if an error occured
-            if($account_username_error == "" and $account_password_error == "" and $account_firstname_error == "" and $account_lastname_error == "")
+            if($account_username_error == "" and $account_password_error == "" and $account_firstname_error == "" and $account_lastname_error == "" and $account_email_error == "")
             {
                 // Query to see if the user is unique
                 $check= "SELECT * FROM Users WHERE username = '$account_username';";

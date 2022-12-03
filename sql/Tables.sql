@@ -3,7 +3,8 @@ CREATE TABLE Users (
     user_password VARCHAR(255) NOT NULL,
     firstName VARCHAR(255),
     lastName VARCHAR(255),
-    PRIMARY KEY (user_password, username)
+    email VARCHAR(255) NOT NULL UNIQUE,
+    PRIMARY KEY (user_password, username, email)
 );
 
 CREATE TABLE Post (
